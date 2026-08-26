@@ -7,7 +7,7 @@
 <HTA:APPLICATION
   ID="QuickOff"
   APPLICATIONNAME="QuickOff"
-  VERSION="1.1.1"
+  VERSION="1.1.2"
   BORDER="none"
   BORDERSTYLE="none"
   CAPTION="no"
@@ -27,46 +27,16 @@ body {
   font-family: 'Segoe UI', Tahoma, sans-serif;
   background: #080808;
   color: #e8e8e8;
-  width: 200px;
+  width: 220px;
   overflow: hidden;
   border: 1px solid #222;
   border-radius: 10px;
   position: relative;
 }
 
-#btn-close {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #1a1a1a;
-  border: 1px solid #333;
-  color: #555;
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 16px;
-  text-align: center;
-  cursor: pointer;
-  z-index: 10;
-  font-family: 'Segoe UI', sans-serif;
-  transition: background 0.15s, color 0.15s;
-}
-#btn-close:hover { background: #c0392b; border-color: #c0392b; color: #fff; }
+/* old floating close removed — close is now in footer row */
 
-#ver {
-  position: absolute;
-  top: 11px;
-  left: 10px;
-  font-size: 9px;
-  color: #2a2a2a;
-  letter-spacing: 0.5px;
-  font-weight: 700;
-  z-index: 10;
-}
-
-#top-gap { height: 34px; cursor: move; }
+/* ver is now in the footer row — no top-gap needed */
 
 .div { height: 1px; background: #111; margin: 0; }
 
@@ -136,6 +106,42 @@ body {
 
 #footer { background: #050505; padding: 4px 10px 8px; }
 
+/* app label + close in footer row */
+#footer-top {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 5px 0 3px;
+}
+#app-label {
+  -ms-flex: 1;
+  flex: 1;
+  font-size: 9px;
+  color: #555;
+  letter-spacing: 1px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: move;
+  -webkit-user-select: none;
+  user-select: none;
+}
+#btn-close-foot {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  color: #555;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 14px;
+  text-align: center;
+  cursor: pointer;
+  font-family: 'Segoe UI', sans-serif;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+#btn-close-foot:hover { background: #c0392b; border-color: #c0392b; color: #fff; }
+
 #status {
   font-size: 9px;
   color: #222;
@@ -203,10 +209,6 @@ body {
   <button class="ov-no"  onclick="hideOv()">No</button>
 </div>
 
-<button id="btn-close" onclick="window.close()" title="Close">&#215;</button>
-<div id="ver">QUICKOFF &nbsp;v1.1.1</div>
-<div id="top-gap"></div>
-
 <div class="div"></div>
 <button class="pwr h-btn"  onclick="ask('hibernate')"><span class="ic">&#9790;</span>Hibernate</button>
 <div class="div"></div>
@@ -228,6 +230,10 @@ body {
 </div>
 
 <div id="footer">
+  <div id="footer-top">
+    <span id="app-label">&#9889; QuickOff</span>
+    <button id="btn-close-foot" onclick="window.close()" title="Close">&#215;</button>
+  </div>
   <div id="status">Ready</div>
   <button id="btn-abort" onclick="abortAll()">&#215; Abort</button>
 </div>
@@ -239,7 +245,7 @@ body {
 </script>
 
 <script language="JavaScript">
-  var W = 200, H = 306;
+  var W = 220, H = 274;
   window.resizeTo(W, H);
   window.moveTo(screen.availWidth - W - 14, screen.availHeight - H - 46);
 
@@ -314,9 +320,9 @@ body {
     el.className = on ? "on" : "";
   }
 
-  // ── Drag on top gap ──────────────────────────
+  // ── Drag on app label ────────────────────────
   var dragging = false, ox = 0, oy = 0;
-  document.getElementById("top-gap").onmousedown = function(e) {
+  document.getElementById("app-label").onmousedown = function(e) {
     dragging = true;
     ox = e.screenX - window.screenLeft;
     oy = e.screenY - window.screenTop;
