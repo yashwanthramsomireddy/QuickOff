@@ -6,7 +6,17 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [1.2.0] — 2026-08-26
 
+### Fixed
+- Removed VBScript `RunCmd` sub — JS-to-VBScript bridge breaks on Windows 11, causing a script error on every button press. All shell commands now use `new ActiveXObject("WScript.Shell")` directly in JavaScript.
+- Close button was too small and low-contrast to see; enlarged and recoloured.
+- Window width was clipping button labels on the right; increased from 220px to 230px.
+
+### Added
+- Light / dark theme toggle (☀ / ☾) in the footer row — switches body class and recolours all elements including buttons, dividers, delay row, footer, overlay, and status text.
+
+- 
 ## [1.1.1] — 2026-08-26
 
 ### Fixed
