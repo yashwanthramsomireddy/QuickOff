@@ -7,9 +7,8 @@
 <HTA:APPLICATION
   ID="QuickOff"
   APPLICATIONNAME="QuickOff"
-  VERSION="1.1.2"
-  BORDER="none"
-  BORDERSTYLE="none"
+  VERSION="1.2"
+  BORDER="thin"
   CAPTION="no"
   MAXIMIZEBUTTON="no"
   MINIMIZEBUTTON="no"
@@ -23,30 +22,27 @@
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 
+/* ── DARK theme (default) ── */
 body {
   font-family: 'Segoe UI', Tahoma, sans-serif;
-  background: #080808;
-  color: #e8e8e8;
-  width: 220px;
+  background: #0a0a0a;
+  color: #d0d0d0;
+  width: 230px;
   overflow: hidden;
-  border: 1px solid #222;
-  border-radius: 10px;
   position: relative;
+  border: 1px solid #1e1e1e;
 }
 
-/* old floating close removed — close is now in footer row */
+.div { height: 1px; background: #151515; }
 
-/* ver is now in the footer row — no top-gap needed */
-
-.div { height: 1px; background: #111; margin: 0; }
-
+/* buttons */
 .pwr {
   width: 100%;
   background: transparent;
   border: none;
   border-left: 2px solid transparent;
-  color: #888;
-  padding: 0 12px;
+  color: #777;
+  padding: 0 14px;
   height: 36px;
   cursor: pointer;
   font-family: 'Segoe UI', sans-serif;
@@ -60,102 +56,118 @@ body {
   gap: 10px;
   transition: background 0.1s, color 0.1s, border-color 0.1s;
 }
-.pwr:hover { background: #0f0f0f; color: #f0f0f0; }
-.pwr:active { background: #080808; }
-
-.pwr .ic {
-  font-size: 13px;
-  width: 16px;
-  text-align: center;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  color: #444;
-}
+.pwr:hover { background: #111; color: #f5f5f5; }
+.pwr:active { background: #0a0a0a; }
+.pwr .ic { font-size: 12px; width: 14px; text-align: center; flex-shrink: 0; color: #333; }
 .pwr:hover .ic { color: inherit; }
 
-.h-btn:hover  { border-left-color: #7c3aed; }
-.sl-btn:hover { border-left-color: #0891b2; }
-.sd-btn:hover { border-left-color: #dc2626; }
-.rs-btn:hover { border-left-color: #ea580c; }
-.lk-btn:hover { border-left-color: #ca8a04; }
+.h-btn:hover  { border-left-color: #8b5cf6; }
+.sl-btn:hover { border-left-color: #06b6d4; }
+.sd-btn:hover { border-left-color: #ef4444; }
+.rs-btn:hover { border-left-color: #f97316; }
+.lk-btn:hover { border-left-color: #eab308; }
 .lo-btn:hover { border-left-color: #6366f1; }
 
+/* delay row */
 #delay-row {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
   align-items: center;
-  padding: 6px 12px;
+  padding: 6px 14px;
   gap: 6px;
-  background: #050505;
-  border-top: 1px solid #111;
+  background: #070707;
+  border-top: 1px solid #151515;
 }
-#delay-row label { font-size: 10px; color: #333; -ms-flex:1; flex:1; }
-#delay-row input {
+#delay-row label { font-size: 10px; color: #3a3a3a; -ms-flex:1; flex:1; }
+#delay-lbl { font-size: 10px; color: #3a3a3a; }
+#delay-val {
   width: 38px;
-  background: #0f0f0f;
-  border: 1px solid #1c1c1c;
+  background: #111;
+  border: 1px solid #1e1e1e;
   border-radius: 4px;
-  color: #666;
+  color: #555;
   font-size: 11px;
   padding: 2px 4px;
   text-align: center;
   font-family: 'Segoe UI', sans-serif;
 }
-#delay-row span { font-size: 10px; color: #2a2a2a; }
 
-#footer { background: #050505; padding: 4px 10px 8px; }
-
-/* app label + close in footer row */
-#footer-top {
+/* footer */
+#footer {
+  background: #070707;
+  padding: 5px 10px 7px;
+  border-top: 1px solid #151515;
+}
+#footer-row {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
   align-items: center;
-  padding: 5px 0 3px;
+  margin-bottom: 4px;
+  gap: 4px;
 }
 #app-label {
   -ms-flex: 1;
   flex: 1;
   font-size: 9px;
-  color: #555;
-  letter-spacing: 1px;
+  color: #444;
+  letter-spacing: 1.2px;
   font-weight: 700;
-  text-transform: uppercase;
   cursor: move;
+  text-transform: uppercase;
   -webkit-user-select: none;
   user-select: none;
 }
-#btn-close-foot {
-  width: 16px; height: 16px;
-  border-radius: 50%;
+
+/* theme toggle */
+#btn-theme {
+  width: 22px; height: 16px;
   background: #1a1a1a;
   border: 1px solid #2a2a2a;
+  border-radius: 3px;
   color: #555;
   font-size: 9px;
-  font-weight: 700;
   line-height: 14px;
+  text-align: center;
+  cursor: pointer;
+  font-family: 'Segoe UI', sans-serif;
+  margin-right: 2px;
+  transition: background 0.15s, color 0.15s;
+}
+#btn-theme:hover { background: #222; color: #aaa; }
+
+/* close button */
+#btn-close {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: #1f1f1f;
+  border: 1px solid #333;
+  color: #888;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
   text-align: center;
   cursor: pointer;
   font-family: 'Segoe UI', sans-serif;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
-#btn-close-foot:hover { background: #c0392b; border-color: #c0392b; color: #fff; }
+#btn-close:hover { background: #c0392b; border-color: #c0392b; color: #fff; }
 
 #status {
   font-size: 9px;
-  color: #222;
+  color: #252525;
   text-align: center;
-  padding: 3px 0;
-  min-height: 15px;
-  letter-spacing: 0.3px;
+  padding: 1px 0 3px;
+  min-height: 14px;
+  letter-spacing: 0.2px;
 }
-#status.on { color: #3a5a8f; }
+#status.on { color: #3a6090; }
 
 #btn-abort {
   width: 100%;
   background: transparent;
-  border: 1px solid #141414;
+  border: 1px solid #151515;
   border-radius: 4px;
   color: #2a2a2a;
   font-family: 'Segoe UI', sans-serif;
@@ -164,24 +176,22 @@ body {
   cursor: pointer;
   transition: background 0.1s, color 0.1s, border-color 0.1s;
 }
-#btn-abort:hover { background: #0f0f0f; color: #555; border-color: #222; }
+#btn-abort:hover { background: #111; color: #555; border-color: #222; }
 
+/* overlay */
 #overlay {
   display: none;
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.95);
-  border-radius: 10px;
+  background: rgba(0,0,0,0.94);
   text-align: center;
   z-index: 50;
-  padding-top: 42px;
+  padding-top: 38px;
 }
 #overlay.show { display: block; }
-
-#ov-ic  { font-size: 26px; display: block; margin-bottom: 8px; }
-#ov-ttl { font-size: 13px; font-weight: 700; color: #ddd; margin-bottom: 4px; }
-#ov-sub { font-size: 10px; color: #3a3a3a; margin: 0 14px 14px; line-height: 1.5; }
-
+#ov-ic  { font-size: 24px; display: block; margin-bottom: 7px; }
+#ov-ttl { font-size: 13px; font-weight: 700; color: #e0e0e0; margin-bottom: 4px; }
+#ov-sub { font-size: 10px; color: #3a3a3a; margin: 0 12px 14px; line-height: 1.5; }
 .ov-yes, .ov-no {
   display: inline-block;
   padding: 6px 16px;
@@ -195,11 +205,41 @@ body {
 }
 .ov-yes { background: #991b1b; color: #fff; }
 .ov-yes:hover { background: #7f1d1d; }
-.ov-no  { background: #0f0f0f; border: 1px solid #1f1f1f; color: #666; }
-.ov-no:hover { background: #161616; color: #999; }
+.ov-no  { background: #111; border: 1px solid #222; color: #666; }
+.ov-no:hover { background: #1a1a1a; color: #999; }
+
+/* ── LIGHT theme ── */
+body.light {
+  background: #f0f0f0;
+  color: #111;
+  border-color: #ccc;
+}
+body.light .div { background: #ddd; }
+body.light .pwr { color: #444; }
+body.light .pwr:hover { background: #e4e4e4; color: #000; }
+body.light .pwr:active { background: #f0f0f0; }
+body.light .pwr .ic { color: #bbb; }
+body.light #delay-row { background: #e8e8e8; border-top-color: #ddd; }
+body.light #delay-row label,
+body.light #delay-lbl { color: #999; }
+body.light #delay-val { background: #fff; border-color: #ccc; color: #333; }
+body.light #footer { background: #e8e8e8; border-top-color: #ddd; }
+body.light #app-label { color: #aaa; }
+body.light #btn-theme { background: #ddd; border-color: #bbb; color: #555; }
+body.light #btn-theme:hover { background: #ccc; color: #222; }
+body.light #btn-close { background: #ddd; border-color: #bbb; color: #555; }
+body.light #btn-abort { border-color: #ddd; color: #bbb; }
+body.light #btn-abort:hover { background: #e4e4e4; color: #666; border-color: #ccc; }
+body.light #status { color: #ccc; }
+body.light #status.on { color: #3a7ac8; }
+body.light #overlay { background: rgba(240,240,240,0.96); }
+body.light #ov-ttl { color: #111; }
+body.light #ov-sub { color: #999; }
+body.light .ov-no { background: #e8e8e8; border-color: #ccc; color: #555; }
+body.light .ov-no:hover { background: #ddd; }
 </style>
 </head>
-<body>
+<body id="body">
 
 <div id="overlay">
   <span id="ov-ic">&#9889;</span>
@@ -225,30 +265,37 @@ body {
 
 <div id="delay-row">
   <label>Delay</label>
-  <input type="number" id="delay" value="0" min="0" max="3600" />
-  <span>sec</span>
+  <input type="number" id="delay-val" value="0" min="0" max="3600" />
+  <span id="delay-lbl">sec</span>
 </div>
 
 <div id="footer">
-  <div id="footer-top">
+  <div id="footer-row">
     <span id="app-label">&#9889; QuickOff</span>
-    <button id="btn-close-foot" onclick="window.close()" title="Close">&#215;</button>
+    <button id="btn-theme" onclick="toggleTheme()" title="Toggle theme">&#9788;</button>
+    <button id="btn-close" onclick="window.close()" title="Close">&#215;</button>
   </div>
   <div id="status">Ready</div>
   <button id="btn-abort" onclick="abortAll()">&#215; Abort</button>
 </div>
 
-<script language="VBScript">
-  Sub RunCmd(cmd)
-    CreateObject("WScript.Shell").Run cmd, 0, False
-  End Sub
-</script>
-
 <script language="JavaScript">
-  var W = 220, H = 274;
+  // ── Shell runner — pure JS, no VBScript bridge ──
+  function runCmd(cmd) {
+    try {
+      var sh = new ActiveXObject("WScript.Shell");
+      sh.Run(cmd, 0, false);
+    } catch(e) {
+      alert("Error running command:\n" + cmd + "\n\n" + e.message);
+    }
+  }
+
+  // ── Window size & position ──
+  var W = 230, H = 272;
   window.resizeTo(W, H);
   window.moveTo(screen.availWidth - W - 14, screen.availHeight - H - 46);
 
+  // ── Action map ──
   var A = {
     hibernate: { ic:"&#9790;",  title:"Hibernate",  sub:"Save session to disk and power off.", cmd:"shutdown /h" },
     sleep:     { ic:"&#8776;",  title:"Sleep",       sub:"Enter low-power standby.",             cmd:"cmd /c \"rundll32.exe powrprof.dll,SetSuspendState 0,1,0\"" },
@@ -263,7 +310,7 @@ body {
   function ask(action) {
     pending = action;
     var a = A[action];
-    var delay = parseInt(document.getElementById("delay").value) || 0;
+    var delay = parseInt(document.getElementById("delay-val").value) || 0;
     document.getElementById("ov-ic").innerHTML  = a.ic;
     document.getElementById("ov-ttl").innerText = a.title;
     document.getElementById("ov-sub").innerText = delay > 0 ? "In " + delay + " seconds." : a.sub;
@@ -276,18 +323,18 @@ body {
   }
 
   function doAction() {
-    var action = pending; // capture BEFORE hideOv() clears it
+    var action = pending;
     hideOv();
     if (!action) return;
     var a = A[action];
-    var delay = parseInt(document.getElementById("delay").value) || 0;
+    var delay = parseInt(document.getElementById("delay-val").value) || 0;
     if (action === "shutdown" || action === "restart") {
-      window.RunCmd(action === "shutdown" ? "shutdown /s /t " + delay : "shutdown /r /t " + delay);
+      runCmd(action === "shutdown" ? "shutdown /s /t " + delay : "shutdown /r /t " + delay);
       setStatus(delay > 0 ? a.title + " in " + delay + "s" : a.title + " sent", true);
     } else if (delay > 0) {
       countdown(delay, a);
     } else {
-      window.RunCmd(a.cmd);
+      runCmd(a.cmd);
       setStatus(a.title + " sent", true);
     }
   }
@@ -300,7 +347,7 @@ body {
       left--;
       if (left <= 0) {
         clearInterval(timer); timer = null;
-        window.RunCmd(a.cmd);
+        runCmd(a.cmd);
         setStatus(a.title + " sent", true);
       } else {
         setStatus(a.title + " in " + left + "s", true);
@@ -310,7 +357,7 @@ body {
 
   function abortAll() {
     if (timer) { clearInterval(timer); timer = null; }
-    window.RunCmd("shutdown /a");
+    runCmd("shutdown /a");
     setStatus("Aborted", false);
   }
 
@@ -320,7 +367,15 @@ body {
     el.className = on ? "on" : "";
   }
 
-  // ── Drag on app label ────────────────────────
+  // ── Theme toggle ──
+  var isLight = false;
+  function toggleTheme() {
+    isLight = !isLight;
+    document.getElementById("body").className = isLight ? "light" : "";
+    document.getElementById("btn-theme").innerHTML = isLight ? "&#9790;" : "&#9788;";
+  }
+
+  // ── Drag on app label ──
   var dragging = false, ox = 0, oy = 0;
   document.getElementById("app-label").onmousedown = function(e) {
     dragging = true;
