@@ -7,6 +7,7 @@
 <HTA:APPLICATION
   ID="QuickOff"
   APPLICATIONNAME="QuickOff"
+  VERSION="1.1.1"
   BORDER="none"
   BORDERSTYLE="none"
   CAPTION="no"
@@ -24,289 +25,231 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, sans-serif;
-  background: #111827;
-  color: #e5e7eb;
-  width: 240px;
+  background: #080808;
+  color: #e8e8e8;
+  width: 200px;
   overflow: hidden;
-  cursor: default;
-  border: 1px solid #374151;
-  border-radius: 12px;
+  border: 1px solid #222;
+  border-radius: 10px;
+  position: relative;
 }
 
-/* ── Drag bar ────────────────────────────────── */
-#bar {
-  background: #0f172a;
-  padding: 8px 10px;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-align: center;
-  align-items: center;
-  cursor: move;
-  border-bottom: 1px solid #1f2937;
-  border-radius: 12px 12px 0 0;
-}
-
-#bar .app-name {
-  -ms-flex: 1;
-  flex: 1;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: #60a5fa;
-}
-
-#bar .lightning {
-  font-size: 14px;
-  margin-right: 6px;
-  color: #fbbf24;
-}
-
-.bar-btn {
-  width: 20px; height: 20px;
+#btn-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  border: none;
-  cursor: pointer;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: #555;
   font-size: 10px;
   font-weight: 700;
-  line-height: 20px;
+  line-height: 16px;
   text-align: center;
-  margin-left: 5px;
-  color: #fff;
-  background: #374151;
-  transition: background 0.15s;
-}
-.bar-btn:hover { background: #ef4444; }
-#btn-min:hover { background: #d97706; }
-
-/* ── Delay row ───────────────────────────────── */
-#delay-row {
-  background: #0f172a;
-  padding: 7px 12px;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-align: center;
-  align-items: center;
-  gap: 6px;
-  border-bottom: 1px solid #1f2937;
-}
-#delay-row label { font-size: 10px; color: #6b7280; -ms-flex:1; flex:1; }
-#delay-row input {
-  width: 44px;
-  background: #1f2937;
-  border: 1px solid #374151;
-  border-radius: 5px;
-  color: #93c5fd;
-  font-size: 12px;
-  padding: 2px 5px;
-  text-align: center;
+  cursor: pointer;
+  z-index: 10;
   font-family: 'Segoe UI', sans-serif;
+  transition: background 0.15s, color 0.15s;
 }
-#delay-row span { font-size: 10px; color: #4b5563; }
+#btn-close:hover { background: #c0392b; border-color: #c0392b; color: #fff; }
 
-/* ── Button grid (table layout — IE safe) ────── */
-#grid {
-  padding: 10px;
-  border-bottom: 1px solid #1f2937;
+#ver {
+  position: absolute;
+  top: 11px;
+  left: 10px;
+  font-size: 9px;
+  color: #2a2a2a;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  z-index: 10;
 }
 
-table.btn-table { width: 100%; border-collapse: separate; border-spacing: 6px; }
+#top-gap { height: 34px; cursor: move; }
+
+.div { height: 1px; background: #111; margin: 0; }
 
 .pwr {
-  width: 50%;
-  background: #1f2937;
-  border: 1px solid #374151;
-  border-radius: 8px;
-  color: #d1d5db;
-  padding: 10px 6px 9px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-left: 2px solid transparent;
+  color: #888;
+  padding: 0 12px;
+  height: 36px;
   cursor: pointer;
   font-family: 'Segoe UI', sans-serif;
-  font-size: 10.5px;
-  font-weight: 600;
-  text-align: center;
-  vertical-align: middle;
-  transition: background 0.15s, border-color 0.15s;
-  letter-spacing: 0.2px;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: left;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
 }
-.pwr:hover { color: #fff; }
-.pwr:active { background: #111827; }
+.pwr:hover { background: #0f0f0f; color: #f0f0f0; }
+.pwr:active { background: #080808; }
 
 .pwr .ic {
-  display: block;
-  font-size: 18px;
-  margin-bottom: 4px;
-  line-height: 1;
+  font-size: 13px;
+  width: 16px;
+  text-align: center;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  color: #444;
 }
+.pwr:hover .ic { color: inherit; }
 
-/* Per-button accent */
-.h-btn  { border-color: #7c3aed; }  .h-btn:hover  { background:#2e1065; border-color:#a78bfa; }
-.sl-btn { border-color: #0891b2; }  .sl-btn:hover { background:#0c4a6e; border-color:#38bdf8; }
-.sd-btn { border-color: #dc2626; }  .sd-btn:hover { background:#450a0a; border-color:#f87171; }
-.rs-btn { border-color: #ea580c; }  .rs-btn:hover { background:#431407; border-color:#fb923c; }
-.lk-btn { border-color: #ca8a04; }  .lk-btn:hover { background:#422006; border-color:#facc15; }
-.lo-btn { border-color: #7c3aed; }  .lo-btn:hover { background:#2e1065; border-color:#c084fc; }
+.h-btn:hover  { border-left-color: #7c3aed; }
+.sl-btn:hover { border-left-color: #0891b2; }
+.sd-btn:hover { border-left-color: #dc2626; }
+.rs-btn:hover { border-left-color: #ea580c; }
+.lk-btn:hover { border-left-color: #ca8a04; }
+.lo-btn:hover { border-left-color: #6366f1; }
 
-/* ── Footer ──────────────────────────────────── */
-#footer { padding: 8px 10px; background: #0f172a; border-radius: 0 0 12px 12px; }
+#delay-row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 6px 12px;
+  gap: 6px;
+  background: #050505;
+  border-top: 1px solid #111;
+}
+#delay-row label { font-size: 10px; color: #333; -ms-flex:1; flex:1; }
+#delay-row input {
+  width: 38px;
+  background: #0f0f0f;
+  border: 1px solid #1c1c1c;
+  border-radius: 4px;
+  color: #666;
+  font-size: 11px;
+  padding: 2px 4px;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+#delay-row span { font-size: 10px; color: #2a2a2a; }
+
+#footer { background: #050505; padding: 4px 10px 8px; }
 
 #status {
-  font-size: 10px;
-  color: #4b5563;
+  font-size: 9px;
+  color: #222;
   text-align: center;
-  padding: 2px 0 5px;
-  min-height: 18px;
+  padding: 3px 0;
+  min-height: 15px;
+  letter-spacing: 0.3px;
 }
-#status.on { color: #60a5fa; }
+#status.on { color: #3a5a8f; }
 
 #btn-abort {
   width: 100%;
   background: transparent;
-  border: 1px solid #1f2937;
-  border-radius: 6px;
-  color: #6b7280;
+  border: 1px solid #141414;
+  border-radius: 4px;
+  color: #2a2a2a;
   font-family: 'Segoe UI', sans-serif;
   font-size: 10px;
-  padding: 6px;
+  padding: 4px;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
 }
-#btn-abort:hover { background: #1f2937; color: #9ca3af; }
+#btn-abort:hover { background: #0f0f0f; color: #555; border-color: #222; }
 
-/* ── Confirm overlay ─────────────────────────── */
 #overlay {
   display: none;
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.88);
+  background: rgba(0,0,0,0.95);
+  border-radius: 10px;
   text-align: center;
-  padding-top: 60px;
-  border-radius: 12px;
-  z-index: 99;
+  z-index: 50;
+  padding-top: 42px;
 }
 #overlay.show { display: block; }
 
-#ov-ic   { font-size: 36px; display: block; margin-bottom: 10px; }
-#ov-ttl  { font-size: 15px; font-weight: 700; color: #f3f4f6; margin-bottom: 6px; }
-#ov-sub  { font-size: 11px; color: #6b7280; margin: 0 20px 18px; line-height: 1.5; }
+#ov-ic  { font-size: 26px; display: block; margin-bottom: 8px; }
+#ov-ttl { font-size: 13px; font-weight: 700; color: #ddd; margin-bottom: 4px; }
+#ov-sub { font-size: 10px; color: #3a3a3a; margin: 0 14px 14px; line-height: 1.5; }
 
 .ov-yes, .ov-no {
   display: inline-block;
-  padding: 8px 22px;
-  border-radius: 7px;
+  padding: 6px 16px;
+  border-radius: 5px;
   border: none;
   font-family: 'Segoe UI', sans-serif;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  margin: 0 4px;
+  margin: 0 3px;
 }
-.ov-yes { background: #dc2626; color: #fff; }
-.ov-yes:hover { background: #b91c1c; }
-.ov-no  { background: #1f2937; border: 1px solid #374151; color: #9ca3af; }
-.ov-no:hover { background: #374151; }
+.ov-yes { background: #991b1b; color: #fff; }
+.ov-yes:hover { background: #7f1d1d; }
+.ov-no  { background: #0f0f0f; border: 1px solid #1f1f1f; color: #666; }
+.ov-no:hover { background: #161616; color: #999; }
 </style>
 </head>
-<body id="body">
+<body>
 
-<!-- Confirm overlay -->
 <div id="overlay">
   <span id="ov-ic">&#9889;</span>
   <div id="ov-ttl">Confirm</div>
-  <div id="ov-sub">Are you sure?</div>
-  <button class="ov-yes" onclick="doAction()">Proceed</button>
-  <button class="ov-no"  onclick="hideOv()">Cancel</button>
+  <div id="ov-sub">Proceed?</div>
+  <button class="ov-yes" onclick="doAction()">Yes</button>
+  <button class="ov-no"  onclick="hideOv()">No</button>
 </div>
 
-<!-- Title bar -->
-<div id="bar">
-  <span class="lightning">&#9889;</span>
-  <span class="app-name">QuickOff</span>
-  <button class="bar-btn" id="btn-min"   onclick="minimize()" title="Minimize">&#8211;</button>
-  <button class="bar-btn" id="btn-close" onclick="window.close()" title="Close">&#215;</button>
-</div>
+<button id="btn-close" onclick="window.close()" title="Close">&#215;</button>
+<div id="ver">QUICKOFF &nbsp;v1.1.1</div>
+<div id="top-gap"></div>
 
-<!-- Delay row -->
+<div class="div"></div>
+<button class="pwr h-btn"  onclick="ask('hibernate')"><span class="ic">&#9790;</span>Hibernate</button>
+<div class="div"></div>
+<button class="pwr sl-btn" onclick="ask('sleep')">    <span class="ic">&#8776;</span>Sleep</button>
+<div class="div"></div>
+<button class="pwr sd-btn" onclick="ask('shutdown')"> <span class="ic">&#9866;</span>Shut Down</button>
+<div class="div"></div>
+<button class="pwr rs-btn" onclick="ask('restart')">  <span class="ic">&#8635;</span>Restart</button>
+<div class="div"></div>
+<button class="pwr lk-btn" onclick="ask('lock')">     <span class="ic">&#9632;</span>Lock</button>
+<div class="div"></div>
+<button class="pwr lo-btn" onclick="ask('signout')">  <span class="ic">&#8594;</span>Sign Out</button>
+<div class="div"></div>
+
 <div id="delay-row">
   <label>Delay</label>
   <input type="number" id="delay" value="0" min="0" max="3600" />
   <span>sec</span>
 </div>
 
-<!-- Buttons -->
-<div id="grid">
-  <table class="btn-table">
-    <tr>
-      <td>
-        <button class="pwr h-btn"  onclick="ask('hibernate')">
-          <span class="ic">&#128313;</span>Hibernate
-        </button>
-      </td>
-      <td>
-        <button class="pwr sl-btn" onclick="ask('sleep')">
-          <span class="ic">&#9790;</span>Sleep
-        </button>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <button class="pwr sd-btn" onclick="ask('shutdown')">
-          <span class="ic">&#9211;</span>Shut Down
-        </button>
-      </td>
-      <td>
-        <button class="pwr rs-btn" onclick="ask('restart')">
-          <span class="ic">&#8635;</span>Restart
-        </button>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <button class="pwr lk-btn" onclick="ask('lock')">
-          <span class="ic">&#128274;</span>Lock
-        </button>
-      </td>
-      <td>
-        <button class="pwr lo-btn" onclick="ask('signout')">
-          <span class="ic">&#8594;</span>Sign Out
-        </button>
-      </td>
-    </tr>
-  </table>
-</div>
-
-<!-- Footer -->
 <div id="footer">
   <div id="status">Ready</div>
-  <button id="btn-abort" onclick="abortAll()">&#215; &nbsp;Abort / Cancel timer</button>
+  <button id="btn-abort" onclick="abortAll()">&#215; Abort</button>
 </div>
 
 <script language="VBScript">
   Sub RunCmd(cmd)
     CreateObject("WScript.Shell").Run cmd, 0, False
   End Sub
-
-  Sub minimize()
-    window.blur
-    CreateObject("WScript.Shell").Run "cmd /c echo.", 0, False
-    Self.minimize()
-  End Sub
 </script>
 
 <script language="JavaScript">
-  // ── Size & position ──────────────────────────
-  var W = 240, H = 370;
+  var W = 200, H = 306;
   window.resizeTo(W, H);
-  var sw = screen.availWidth, sh = screen.availHeight;
-  window.moveTo(sw - W - 16, sh - H - 48);
+  window.moveTo(screen.availWidth - W - 14, screen.availHeight - H - 46);
 
-  // ── Action map ───────────────────────────────
   var A = {
-    hibernate: { ic:"&#128313;", title:"Hibernate",  sub:"Saves session to disk then powers off.", cmd:"shutdown /h" },
-    sleep:     { ic:"&#9790;",   title:"Sleep",       sub:"Enters low-power standby mode.",          cmd:"rundll32.exe powrprof.dll,SetSuspendState 0,1,0" },
-    shutdown:  { ic:"&#9211;",   title:"Shut Down",   sub:"Closes all programs and powers off.",     cmd:"shutdown /s /t 0" },
-    restart:   { ic:"&#8635;",   title:"Restart",     sub:"Reboots Windows.",                        cmd:"shutdown /r /t 0" },
-    lock:      { ic:"&#128274;", title:"Lock PC",     sub:"Locks your session.",                     cmd:"rundll32.exe user32.dll,LockWorkStation" },
-    signout:   { ic:"&#8594;",   title:"Sign Out",    sub:"Signs out of the current Windows user.",  cmd:"shutdown /l" }
+    hibernate: { ic:"&#9790;",  title:"Hibernate",  sub:"Save session to disk and power off.", cmd:"shutdown /h" },
+    sleep:     { ic:"&#8776;",  title:"Sleep",       sub:"Enter low-power standby.",             cmd:"cmd /c \"rundll32.exe powrprof.dll,SetSuspendState 0,1,0\"" },
+    shutdown:  { ic:"&#9866;",  title:"Shut Down",   sub:"Close all apps and power off.",        cmd:"shutdown /s /t 0" },
+    restart:   { ic:"&#8635;",  title:"Restart",     sub:"Reboot Windows.",                      cmd:"shutdown /r /t 0" },
+    lock:      { ic:"&#9632;",  title:"Lock",        sub:"Lock your session.",                   cmd:"cmd /c \"rundll32.exe user32.dll,LockWorkStation\"" },
+    signout:   { ic:"&#8594;",  title:"Sign Out",    sub:"Sign out of Windows.",                 cmd:"shutdown /l" }
   };
 
   var pending = "", timer = null;
@@ -317,7 +260,7 @@ table.btn-table { width: 100%; border-collapse: separate; border-spacing: 6px; }
     var delay = parseInt(document.getElementById("delay").value) || 0;
     document.getElementById("ov-ic").innerHTML  = a.ic;
     document.getElementById("ov-ttl").innerText = a.title;
-    document.getElementById("ov-sub").innerText = a.sub + (delay > 0 ? " (" + delay + "s delay)" : "");
+    document.getElementById("ov-sub").innerText = delay > 0 ? "In " + delay + " seconds." : a.sub;
     document.getElementById("overlay").className = "show";
   }
 
@@ -327,40 +270,34 @@ table.btn-table { width: 100%; border-collapse: separate; border-spacing: 6px; }
   }
 
   function doAction() {
+    var action = pending; // capture BEFORE hideOv() clears it
     hideOv();
-    if (!pending) return;
-    var a = A[pending];
+    if (!action) return;
+    var a = A[action];
     var delay = parseInt(document.getElementById("delay").value) || 0;
-
-    if (pending === "shutdown" || pending === "restart") {
-      var cmd = pending === "shutdown"
-        ? "shutdown /s /t " + delay
-        : "shutdown /r /t " + delay;
-      window.RunCmd(cmd);
-      if (delay > 0)
-        setStatus("Timer: " + a.title + " in " + delay + "s", true);
-      else
-        setStatus(a.title + " command sent", true);
+    if (action === "shutdown" || action === "restart") {
+      window.RunCmd(action === "shutdown" ? "shutdown /s /t " + delay : "shutdown /r /t " + delay);
+      setStatus(delay > 0 ? a.title + " in " + delay + "s" : a.title + " sent", true);
     } else if (delay > 0) {
       countdown(delay, a);
     } else {
       window.RunCmd(a.cmd);
-      setStatus(a.title + " command sent", true);
+      setStatus(a.title + " sent", true);
     }
   }
 
   function countdown(secs, a) {
     if (timer) clearInterval(timer);
     var left = secs;
-    setStatus(a.title + " in " + left + "s…", true);
+    setStatus(a.title + " in " + left + "s", true);
     timer = setInterval(function() {
       left--;
       if (left <= 0) {
         clearInterval(timer); timer = null;
         window.RunCmd(a.cmd);
-        setStatus(a.title + " command sent", true);
+        setStatus(a.title + " sent", true);
       } else {
-        setStatus(a.title + " in " + left + "s…", true);
+        setStatus(a.title + " in " + left + "s", true);
       }
     }, 1000);
   }
@@ -371,15 +308,15 @@ table.btn-table { width: 100%; border-collapse: separate; border-spacing: 6px; }
     setStatus("Aborted", false);
   }
 
-  function setStatus(msg, active) {
+  function setStatus(msg, on) {
     var el = document.getElementById("status");
     el.innerText = msg;
-    el.className = active ? "on" : "";
+    el.className = on ? "on" : "";
   }
 
-  // ── Drag ─────────────────────────────────────
+  // ── Drag on top gap ──────────────────────────
   var dragging = false, ox = 0, oy = 0;
-  document.getElementById("bar").onmousedown = function(e) {
+  document.getElementById("top-gap").onmousedown = function(e) {
     dragging = true;
     ox = e.screenX - window.screenLeft;
     oy = e.screenY - window.screenTop;
@@ -389,6 +326,5 @@ table.btn-table { width: 100%; border-collapse: separate; border-spacing: 6px; }
   };
   document.onmouseup = function() { dragging = false; };
 </script>
-
 </body>
 </html>

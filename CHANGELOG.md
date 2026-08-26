@@ -7,6 +7,35 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.1.1] — 2026-08-26
+
+### Fixed
+- **Critical bug**: `doAction()` called `hideOv()` before saving `pending`, causing `pending` to be cleared to `""` before the action check — meaning every button silently did nothing after confirming. Fixed by capturing `pending` into a local variable before calling `hideOv()`.
+- **Lock not working**: wrapped `rundll32.exe user32.dll,LockWorkStation` in `cmd /c` for reliable execution from WScript.Shell context.
+- **Sleep reliability**: same `cmd /c` wrapper applied to `powrprof.dll,SetSuspendState`.
+- **Window not draggable**: drag handler re-added to `#top-gap` area (was lost when title bar was removed in v1.1.0).
+
+---
+
+## [1.1.0] — 2026-08-26
+
+### Changed
+- Complete UI redesign — pitch black (`#080808`) minimal theme
+- Layout changed from 2-column card grid to compact single-column list (icon left, label right)
+- Removed title/drag bar entirely — window chrome stripped to zero (`BORDER="none"`, no caption)
+- Close button is now a small floating circle (top-right corner, always accessible)
+- Version badge replaces app name label — ultra-subtle `QUICKOFF` text top-left
+- Button height reduced to 36px — coloured left-border accent on hover instead of card fill
+- Window height reduced from 480px to 306px — significantly more compact
+- Confirm overlay simplified — shorter text, smaller footprint
+- Abort row slimmed to single line with inline status
+- Dividers between every action for clear visual separation
+
+### Fixed
+- Removed unused drag-bar VBScript handler
+
+---
+
 ## [1.0.0] — 2026-08-26
 
 ### Added
