@@ -3,15 +3,15 @@
 > A compact, modern power menu widget for Windows 10 and 11 — no install required.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11-0078D4?logo=windows)](https://github.com/your-username/quickoff)
+[![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11-0078D4?logo=windows)](https://github.com/yashwanthramsomireddy/QuickOff)
 [![No Install](https://img.shields.io/badge/Install-None%20Required-brightgreen)]()
-[![Version](https://img.shields.io/badge/Version-1.0.0-orange)]()
+[![Version](https://img.shields.io/badge/Version-1.3-orange)](https://github.com/yashwanthramsomireddy/QuickOff/releases)
 
 ---
 
 ## What is QuickOff?
 
-QuickOff is a lightweight floating power menu that sits in the corner of your screen. One double-click gives you instant access to Hibernate, Sleep, Shut Down, Restart, Lock, and Sign Out — with a delay timer and abort button built in.
+QuickOff is a lightweight floating power menu that sits in the corner of your screen. One double-click gives you instant access to Hibernate, Sleep, Shut Down, Restart, Lock, and Sign Out — with a built-in delay timer and confirm overlay.
 
 It runs entirely on tools already built into Windows (`mshta.exe`, `shutdown`, `rundll32`). No installer, no admin rights, no dependencies.
 
@@ -21,12 +21,15 @@ It runs entirely on tools already built into Windows (`mshta.exe`, `shutdown`, `
 
 - **6 power actions** — Hibernate, Sleep, Shut Down, Restart, Lock PC, Sign Out
 - **Delay timer** — schedule any action N seconds ahead
-- **Abort button** — cancel a running countdown or pending shutdown at any time
 - **Confirm overlay** — prevents accidental triggers
-- **Draggable window** — reposition anywhere on screen
+- **Light & dark theme** — toggle with one click, remembers your choice
+- **Auto Desktop shortcut** — created automatically on first launch (with the correct icon)
+- **App icon** — amber bolt logo shown in the widget, Desktop shortcut, and File Explorer
+- **Auto-update check** — silently checks GitHub Releases on launch; shows a badge when a new version is available
+- **About panel** — version info, license, author, and GitHub link built in
 - **Autostart on login** — optional, set up via `setup.bat` (no admin needed)
 - **CLI mode** — drive any action from a terminal or Task Scheduler script
-- **Zero dependencies** — pure `.bat` + `.hta`, ships with Windows since XP
+- **Zero dependencies** — pure `.bat` + `.hta`, runs on Windows built-ins
 
 ---
 
@@ -34,7 +37,7 @@ It runs entirely on tools already built into Windows (`mshta.exe`, `shutdown`, `
 
 ### 1. Download
 
-Go to the [Releases](../../releases) page and download the latest `QuickOff.zip`.
+Go to the [Releases](https://github.com/yashwanthramsomireddy/QuickOff/releases) page and download the latest `QuickOff-v1.3.zip`.
 
 ### 2. Extract
 
@@ -42,12 +45,17 @@ Unzip to any folder, e.g. `C:\Tools\QuickOff\`.
 
 ### 3. Run
 
-Double-click **`QuickOff.hta`** — the widget appears in the bottom-right corner.
+Double-click **`QuickOff.hta`** — the widget appears in the bottom-right corner.  
+A Desktop shortcut (`QuickOff.lnk`) is created automatically on the first launch.
 
-### 4. (Optional) Autostart on login
+### 4. (Optional) Register the app icon in File Explorer
+
+Run **`setup.bat`** — it registers the icon so `QuickOff.hta` shows the amber bolt in File Explorer automatically.
+
+### 5. (Optional) Autostart on login
 
 Run **`setup.bat`** and choose **[1] Enable autostart**.  
-To remove it later, run `setup.bat` again and choose **[2] Disable autostart**.
+To remove it later, choose **[2] Disable autostart**.
 
 ---
 
@@ -75,8 +83,9 @@ launch.bat abort        Cancel any scheduled shutdown / restart
 | File | Description |
 |------|-------------|
 | `QuickOff.hta` | The GUI widget — double-click to open |
+| `QuickOff.ico` | App icon — keep in the same folder as the HTA |
 | `launch.bat` | CLI launcher for scripting and terminal use |
-| `setup.bat` | Enable or disable autostart on Windows login |
+| `setup.bat` | Register icon, create shortcut, enable/disable autostart |
 | `LICENSE` | MIT License |
 | `CHANGELOG.md` | Version history |
 
@@ -91,7 +100,7 @@ launch.bat abort        Cancel any scheduled shutdown / restart
 | Windows 8 / 8.1 | ✅ Should work |
 | Windows 7 | ✅ Should work |
 
-QuickOff uses `mshta.exe` (Microsoft HTML Application Host), which is built into every version of Windows since XP.
+> **Note:** On Windows 11 the title bar and taskbar icon will always show `mshta.exe`'s default icon — this is an OS-level restriction for HTA files that cannot be overridden. The Desktop shortcut and File Explorer icon display correctly.
 
 ---
 
@@ -104,6 +113,12 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Run
 ```
 
 This is the standard per-user autostart location. No elevated permissions are needed, and it only affects your own Windows account. To remove it, run `setup.bat` and choose option 2.
+
+---
+
+## Built By
+
+**Yashwanth Ram Somireddy** — [TeamExyKings](https://github.com/yashwanthramsomireddy)
 
 ---
 
