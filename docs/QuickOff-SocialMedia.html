@@ -1,0 +1,1396 @@
+<title>QuickOff Social Kit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #080808;
+    --surface:   #111111;
+    --raised:    #1A1A1A;
+    --border:    #252220;
+    --amber:     #F59E0B;
+    --amber-hi:  #FCD34D;
+    --amber-lo:  #92600A;
+    --amber-dim: #3D2A04;
+    --text:      #EDE8DF;
+    --muted:     #6B6258;
+    --sub:       #9A8F83;
+    --success:   #22C55E;
+
+    --font-display: 'Barlow Condensed', sans-serif;
+    --font-body:    'DM Sans', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SHELL ─────────────────────────────────────── */
+  .shell {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  /* ── TOPBAR ────────────────────────────────────── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 20px;
+    height: 52px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .topbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: .03em;
+    color: var(--amber);
+    text-transform: uppercase;
+  }
+  .topbar-logo span { color: var(--text); }
+  .topbar-bolt {
+    width: 26px; height: 26px;
+    background: var(--amber);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .topbar-sep { flex: 1; }
+  .topbar-badge {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--raised);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 8px;
+  }
+
+  /* ── TABS ──────────────────────────────────────── */
+  .tab-bar {
+    display: flex;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    padding: 0 20px;
+    gap: 2px;
+  }
+  .tab-btn {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 12px 16px 10px;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--sub); }
+  .tab-btn.active {
+    color: var(--amber);
+    border-bottom-color: var(--amber);
+  }
+
+  /* ── PANEL ─────────────────────────────────────── */
+  .panels { flex: 1; overflow-y: auto; }
+  .panel { display: none; padding: 28px 24px; max-width: 1100px; margin: 0 auto; }
+  .panel.active { display: block; }
+
+  /* ── TWO-COL LAYOUT ────────────────────────────── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  @media (max-width: 700px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  /* ── CONTROLS CARD ─────────────────────────────── */
+  .ctrl-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .ctrl-section-label {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .ctrl-group { display: flex; flex-direction: column; gap: 6px; }
+  .ctrl-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--sub);
+  }
+  input[type="text"], textarea, select {
+    background: var(--raised);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 13px;
+    padding: 8px 10px;
+    width: 100%;
+    outline: none;
+    transition: border-color .15s;
+  }
+  input[type="text"]:focus,
+  textarea:focus,
+  select:focus { border-color: var(--amber-lo); }
+  textarea { resize: vertical; min-height: 60px; }
+  select option { background: var(--raised); }
+
+  .color-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .color-swatch {
+    width: 26px; height: 26px;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform .1s, border-color .1s;
+  }
+  .color-swatch:hover { transform: scale(1.1); }
+  .color-swatch.selected { border-color: var(--text); }
+
+  .btn-primary {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    background: var(--amber);
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background .15s, transform .08s;
+  }
+  .btn-primary:hover { background: var(--amber-hi); }
+  .btn-primary:active { transform: scale(.98); }
+
+  .btn-ghost {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    background: var(--raised);
+    color: var(--sub);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: border-color .15s, color .15s;
+  }
+  .btn-ghost:hover { border-color: var(--amber-lo); color: var(--text); }
+
+  /* ── PREVIEW AREA ──────────────────────────────── */
+  .preview-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .preview-label {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .canvas-box {
+    background: var(--raised);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  canvas {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+  }
+  .dl-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* ── POST COPY ─────────────────────────────────── */
+  .post-section-label {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .post-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .post-card-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 14px 9px;
+    border-bottom: 1px solid var(--border);
+  }
+  .post-card-icon {
+    font-size: 15px;
+    line-height: 1;
+  }
+  .post-card-name {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--sub);
+    flex: 1;
+  }
+  .post-char-count {
+    font-size: 11px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .post-body {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.65;
+    padding: 12px 14px;
+    flex: 1;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .post-card-foot {
+    padding: 8px 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+  .copy-btn {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    background: var(--amber-dim);
+    color: var(--amber);
+    border: 1px solid var(--amber-lo);
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background .12s, color .12s;
+  }
+  .copy-btn:hover { background: var(--amber); color: #000; }
+  .copy-btn.copied { background: #14532D; color: #4ADE80; border-color: #166534; }
+
+  /* ── KIT GRID ──────────────────────────────────── */
+  .kit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .kit-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .kit-item-head {
+    padding: 12px 14px 6px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+  .kit-item-title {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--sub);
+  }
+  .kit-item-desc {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--muted);
+    padding: 0 14px 10px;
+    line-height: 1.5;
+  }
+  .kit-item-dim {
+    font-size: 11px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .kit-canvas-wrap {
+    padding: 0 14px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .kit-dl {
+    border-top: 1px solid var(--border);
+    padding: 8px 14px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  /* ── SCROLLBAR ─────────────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* ── DIVIDER ───────────────────────────────────── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 4px 0;
+  }
+
+  /* ── FEATURE TAGS ──────────────────────────────── */
+  .feature-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .feature-tag {
+    font-size: 11px;
+    background: var(--amber-dim);
+    color: var(--amber-hi);
+    border-radius: 3px;
+    padding: 2px 7px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: border-color .1s;
+  }
+  .feature-tag.off {
+    background: var(--raised);
+    color: var(--muted);
+    border-color: var(--border);
+  }
+</style>
+
+<div class="shell">
+
+  <!-- topbar -->
+  <div class="topbar">
+    <div class="topbar-bolt">⚡</div>
+    <div class="topbar-logo">QuickOff <span style="font-weight:400;color:var(--sub);margin-left:2px">Social Kit</span></div>
+    <div class="topbar-sep"></div>
+    <div class="topbar-badge">v1.3</div>
+  </div>
+
+  <!-- tab bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('video')">🎬 Social Card (Video)</button>
+    <button class="tab-btn" onclick="switchTab('kit')">📦 Social Media Kit</button>
+    <button class="tab-btn" onclick="switchTab('yt')">📺 YouTube Assets</button>
+  </div>
+
+  <div class="panels">
+
+    <!-- ═══════════════════════════════════════════════
+         TAB 1 — SOCIAL CARD (VIDEO)
+    ═══════════════════════════════════════════════ -->
+    <div class="panel active" id="panel-video">
+      <div class="two-col">
+
+        <!-- controls -->
+        <div class="ctrl-card">
+          <div>
+            <div class="ctrl-section-label">Content</div>
+            <div class="ctrl-group" style="margin-bottom:10px">
+              <label class="ctrl-label">App Name</label>
+              <input type="text" id="vc-name" value="QuickOff" oninput="drawVideoCard()">
+            </div>
+            <div class="ctrl-group" style="margin-bottom:10px">
+              <label class="ctrl-label">Tagline</label>
+              <input type="text" id="vc-tag" value="Power menu. Zero install." oninput="drawVideoCard()">
+            </div>
+            <div class="ctrl-group" style="margin-bottom:10px">
+              <label class="ctrl-label">Sub-copy</label>
+              <input type="text" id="vc-sub" value="Free · Windows 10/11 · MIT License" oninput="drawVideoCard()">
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <div>
+            <div class="ctrl-section-label">Features shown</div>
+            <div class="feature-tags" id="feat-tags"></div>
+          </div>
+
+          <hr class="divider">
+
+          <div>
+            <div class="ctrl-section-label">Accent Colour</div>
+            <div class="color-row" id="color-row"></div>
+          </div>
+
+          <hr class="divider">
+
+          <div>
+            <div class="ctrl-section-label">Format</div>
+            <div class="ctrl-group">
+              <label class="ctrl-label">Aspect Ratio</label>
+              <select id="vc-ratio" onchange="drawVideoCard()">
+                <option value="16:9">16:9 — YouTube / Twitter</option>
+                <option value="9:16">9:16 — Reels / Shorts / TikTok</option>
+                <option value="1:1">1:1 — Instagram / LinkedIn</option>
+                <option value="4:5">4:5 — Instagram Portrait</option>
+              </select>
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <button class="btn-primary" onclick="dlCanvas('vc-canvas','QuickOff-VideoCard')">⬇ Download Card</button>
+        </div>
+
+        <!-- preview -->
+        <div class="preview-wrap">
+          <div class="preview-label">Live Preview</div>
+          <div class="canvas-box">
+            <canvas id="vc-canvas"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         TAB 2 — SOCIAL MEDIA KIT
+    ═══════════════════════════════════════════════ -->
+    <div class="panel" id="panel-kit">
+
+      <!-- shared controls row -->
+      <div class="ctrl-card" style="margin-bottom:20px;flex-direction:row;flex-wrap:wrap;gap:20px;align-items:flex-end">
+        <div class="ctrl-group" style="flex:1;min-width:160px">
+          <label class="ctrl-label">Headline copy</label>
+          <input type="text" id="kit-headline" value="Meet QuickOff" oninput="drawAllKit()">
+        </div>
+        <div class="ctrl-group" style="flex:1;min-width:180px">
+          <label class="ctrl-label">Tagline</label>
+          <input type="text" id="kit-tag" value="Power menu. Zero install." oninput="drawAllKit()">
+        </div>
+        <div class="ctrl-group" style="flex:1;min-width:140px">
+          <label class="ctrl-label">CTA</label>
+          <input type="text" id="kit-cta" value="github.com/yashwanthramsomireddy/QuickOff" oninput="drawAllKit()">
+        </div>
+      </div>
+
+      <!-- POST COPY SECTION -->
+      <div class="post-section-label">📋 Ready-to-Post Copy</div>
+      <div class="post-grid" id="post-grid"></div>
+
+      <div class="post-section-label">🖼 Image Assets</div>
+      <div class="kit-grid">
+        <!-- Twitter/X banner -->
+        <div class="kit-item">
+          <div class="kit-item-head">
+            <span class="kit-item-title">Twitter / X Post</span>
+            <span class="kit-item-dim">1200 × 675</span>
+          </div>
+          <p class="kit-item-desc">Optimised for Twitter/X feed posts and link previews. Landscape format renders sharp on both desktop and mobile timelines.</p>
+          <div class="kit-canvas-wrap">
+            <canvas id="kit-twitter" style="max-width:100%;border-radius:4px"></canvas>
+          </div>
+          <div class="kit-dl">
+            <button class="btn-ghost" onclick="dlCanvas('kit-twitter','QuickOff-Twitter-Post')">⬇ Download</button>
+          </div>
+        </div>
+
+        <!-- Instagram Square -->
+        <div class="kit-item">
+          <div class="kit-item-head">
+            <span class="kit-item-title">Instagram Square</span>
+            <span class="kit-item-dim">1080 × 1080</span>
+          </div>
+          <p class="kit-item-desc">Square format for Instagram feed posts and LinkedIn carousels. Maximum reach — displays without cropping on every platform.</p>
+          <div class="kit-canvas-wrap">
+            <canvas id="kit-ig-sq" style="max-width:100%;border-radius:4px"></canvas>
+          </div>
+          <div class="kit-dl">
+            <button class="btn-ghost" onclick="dlCanvas('kit-ig-sq','QuickOff-Instagram-Square')">⬇ Download</button>
+          </div>
+        </div>
+
+        <!-- Instagram Story -->
+        <div class="kit-item">
+          <div class="kit-item-head">
+            <span class="kit-item-title">Instagram Story</span>
+            <span class="kit-item-dim">1080 × 1920</span>
+          </div>
+          <p class="kit-item-desc">Full-screen vertical for Instagram Stories, Facebook Stories, and TikTok. Takes up the entire screen for maximum impact.</p>
+          <div class="kit-canvas-wrap">
+            <canvas id="kit-ig-story" style="max-width:140px;border-radius:4px"></canvas>
+          </div>
+          <div class="kit-dl">
+            <button class="btn-ghost" onclick="dlCanvas('kit-ig-story','QuickOff-Instagram-Story')">⬇ Download</button>
+          </div>
+        </div>
+
+        <!-- LinkedIn Banner -->
+        <div class="kit-item">
+          <div class="kit-item-head">
+            <span class="kit-item-title">LinkedIn Post</span>
+            <span class="kit-item-dim">1200 × 627</span>
+          </div>
+          <p class="kit-item-desc">Sized for LinkedIn's native post image format. Slightly taller crop than Twitter — optimised for professional feed visibility.</p>
+          <div class="kit-canvas-wrap">
+            <canvas id="kit-linkedin" style="max-width:100%;border-radius:4px"></canvas>
+          </div>
+          <div class="kit-dl">
+            <button class="btn-ghost" onclick="dlCanvas('kit-linkedin','QuickOff-LinkedIn-Post')">⬇ Download</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         TAB 3 — YOUTUBE ASSETS
+    ═══════════════════════════════════════════════ -->
+    <div class="panel" id="panel-yt">
+
+      <!-- controls -->
+      <div class="ctrl-card" style="margin-bottom:20px;flex-direction:row;flex-wrap:wrap;gap:16px;align-items:flex-end">
+        <div class="ctrl-group" style="flex:1;min-width:150px">
+          <label class="ctrl-label">Channel Name</label>
+          <input type="text" id="yt-channel" value="TeamExyKings" oninput="drawAllYT()">
+        </div>
+        <div class="ctrl-group" style="flex:1;min-width:200px">
+          <label class="ctrl-label">Channel Tagline</label>
+          <input type="text" id="yt-tagline" value="Windows tools. Zero install." oninput="drawAllYT()">
+        </div>
+        <div class="ctrl-group" style="flex:1;min-width:160px">
+          <label class="ctrl-label">Thumbnail — Video Title</label>
+          <input type="text" id="yt-vid-title" value="QuickOff v1.3" oninput="drawAllYT()">
+        </div>
+        <div class="ctrl-group" style="flex:1;min-width:160px">
+          <label class="ctrl-label">Thumbnail — Sub</label>
+          <input type="text" id="yt-vid-sub" value="Power menu for Windows" oninput="drawAllYT()">
+        </div>
+      </div>
+
+      <div class="kit-grid">
+
+        <!-- Channel Banner -->
+        <div class="kit-item" style="grid-column:1/-1">
+          <div class="kit-item-head">
+            <span class="kit-item-title">Channel Art / Banner</span>
+            <span class="kit-item-dim">2560 × 1440</span>
+          </div>
+          <p class="kit-item-desc">YouTube channel banner shown at the top of your channel page. YouTube's safe zone for all devices is the centre 1546 × 423 px region — all key content is kept within it.</p>
+          <div class="kit-canvas-wrap">
+            <canvas id="yt-banner" style="max-width:100%;border-radius:4px"></canvas>
+          </div>
+          <div class="kit-dl">
+            <button class="btn-ghost" onclick="dlCanvas('yt-banner','QuickOff-YouTube-Banner')">⬇ Download</button>
+          </div>
+        </div>
+
+        <!-- Thumbnail -->
+        <div class="kit-item">
+          <div class="kit-item-head">
+            <span class="kit-item-title">Video Thumbnail</span>
+            <span class="kit-item-dim">1280 × 720</span>
+          </div>
+          <p class="kit-item-desc">Custom thumbnail displayed in search results and suggested videos. Bold text and high-contrast design improve click-through rate significantly.</p>
+          <div class="kit-canvas-wrap">
+            <canvas id="yt-thumb" style="max-width:100%;border-radius:4px"></canvas>
+          </div>
+          <div class="kit-dl">
+            <button class="btn-ghost" onclick="dlCanvas('yt-thumb','QuickOff-YouTube-Thumbnail')">⬇ Download</button>
+          </div>
+        </div>
+
+        <!-- End Screen -->
+        <div class="kit-item">
+          <div class="kit-item-head">
+            <span class="kit-item-title">End Screen / Card</span>
+            <span class="kit-item-dim">1920 × 1080</span>
+          </div>
+          <p class="kit-item-desc">Outro template for the final 20 seconds of your video. Placeholder zones are sized for YouTube's subscribe button and video card overlays.</p>
+          <div class="kit-canvas-wrap">
+            <canvas id="yt-end" style="max-width:100%;border-radius:4px"></canvas>
+          </div>
+          <div class="kit-dl">
+            <button class="btn-ghost" onclick="dlCanvas('yt-end','QuickOff-YouTube-EndScreen')">⬇ Download</button>
+          </div>
+        </div>
+
+        <!-- Profile Icon -->
+        <div class="kit-item">
+          <div class="kit-item-head">
+            <span class="kit-item-title">Channel Icon</span>
+            <span class="kit-item-dim">800 × 800</span>
+          </div>
+          <p class="kit-item-desc">Your channel profile picture — shown as a circle in the YouTube UI. The amber bolt mark stays legible even at 32 px thumbnail size.</p>
+          <div class="kit-canvas-wrap">
+            <canvas id="yt-icon" style="max-width:160px;border-radius:4px"></canvas>
+          </div>
+          <div class="kit-dl">
+            <button class="btn-ghost" onclick="dlCanvas('yt-icon','QuickOff-YouTube-Icon')">⬇ Download</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /panels -->
+</div><!-- /shell -->
+
+<script>
+/* ───────────── PALETTE ─────────────────────────── */
+const P = {
+  bg:       '#080808',
+  surface:  '#111111',
+  raised:   '#1A1A1A',
+  border:   '#252220',
+  amber:    '#F59E0B',
+  amberHi:  '#FCD34D',
+  amberLo:  '#92600A',
+  amberDim: '#3D2A04',
+  text:     '#EDE8DF',
+  sub:      '#9A8F83',
+  muted:    '#6B6258',
+};
+
+const ACCENT_OPTIONS = [
+  { name:'Amber',  val:'#F59E0B' },
+  { name:'Cyan',   val:'#06B6D4' },
+  { name:'Violet', val:'#8B5CF6' },
+  { name:'Rose',   val:'#F43F5E' },
+  { name:'Lime',   val:'#84CC16' },
+  { name:'White',  val:'#E5E1DA' },
+];
+
+let vcAccent = '#F59E0B';
+
+const FEATURES = [
+  '6 Power Actions', 'Delay Timer', 'Confirm Overlay',
+  'Light & Dark Theme', 'Desktop Shortcut', 'Auto-Update Check',
+  'CLI Mode', 'Zero Install',
+];
+
+let featureState = {};
+FEATURES.forEach(f => featureState[f] = true);
+
+/* ───────────── TABS ─────────────────────────────── */
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'kit') setTimeout(drawAllKit, 50);
+  if (id === 'yt')  setTimeout(drawAllYT, 50);
+}
+
+/* ───────────── INIT CONTROLS ───────────────────── */
+function initControls() {
+  // feature tags
+  const tagsEl = document.getElementById('feat-tags');
+  FEATURES.forEach(f => {
+    const btn = document.createElement('button');
+    btn.className = 'feature-tag';
+    btn.textContent = f;
+    btn.onclick = () => {
+      featureState[f] = !featureState[f];
+      btn.classList.toggle('off', !featureState[f]);
+      drawVideoCard();
+    };
+    tagsEl.appendChild(btn);
+  });
+
+  // color swatches
+  const colRow = document.getElementById('color-row');
+  ACCENT_OPTIONS.forEach(c => {
+    const sw = document.createElement('div');
+    sw.className = 'color-swatch' + (c.val === vcAccent ? ' selected' : '');
+    sw.style.background = c.val;
+    sw.title = c.name;
+    sw.onclick = () => {
+      vcAccent = c.val;
+      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+      sw.classList.add('selected');
+      drawVideoCard();
+    };
+    colRow.appendChild(sw);
+  });
+}
+
+/* ───────────── CANVAS HELPERS ───────────────────── */
+function setCanvas(id, w, h) {
+  const c = document.getElementById(id);
+  c.width = w; c.height = h;
+  return c.getContext('2d');
+}
+
+function bg(ctx, w, h, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, w, h);
+}
+
+function roundRect(ctx, x, y, w, h, r, fill, stroke) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 2; ctx.stroke(); }
+}
+
+function grid(ctx, w, h, color, gap) {
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1;
+  for (let x = 0; x < w; x += gap) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+  }
+  for (let y = 0; y < h; y += gap) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+  }
+}
+
+function bolt(ctx, cx, cy, r, accent) {
+  // circle
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fillStyle = accent;
+  ctx.fill();
+  // lightning ⚡ via text
+  ctx.fillStyle = '#000';
+  ctx.font = `bold ${r * 1.1}px Arial`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('⚡', cx, cy + 1);
+}
+
+/* ── DOWNLOADS CAPABILITY ───────────────────────── */
+let _downloads = null;
+(async () => {
+  _downloads = await claude.use('downloads');
+})();
+
+async function dlCanvas(id, name) {
+  const c = document.getElementById(id);
+  if (_downloads) {
+    c.toBlob(async blob => {
+      try {
+        await _downloads.save({ filename: name + '.png', data: blob });
+      } catch (e) {
+        if (e && e.code !== 'declined') fallbackDl(c, name);
+      }
+    }, 'image/png');
+  } else {
+    fallbackDl(c, name);
+  }
+}
+
+function fallbackDl(c, name) {
+  const a = document.createElement('a');
+  a.download = name + '.png';
+  a.href = c.toDataURL('image/png');
+  a.click();
+}
+
+/* ───────────── VIDEO CARD ───────────────────────── */
+function drawVideoCard() {
+  const ratio = document.getElementById('vc-ratio').value;
+  const name  = document.getElementById('vc-name').value || 'QuickOff';
+  const tag   = document.getElementById('vc-tag').value  || '';
+  const sub   = document.getElementById('vc-sub').value  || '';
+
+  let W, H;
+  if (ratio === '16:9')  { W = 1280; H = 720; }
+  else if (ratio === '9:16') { W = 1080; H = 1920; }
+  else if (ratio === '1:1')  { W = 1080; H = 1080; }
+  else                        { W = 1080; H = 1350; }
+
+  const ctx = setCanvas('vc-canvas', W, H);
+  const isPortrait = H > W;
+  const short = Math.min(W, H);
+
+  // background
+  bg(ctx, W, H, P.bg);
+
+  // grid
+  grid(ctx, W, H, 'rgba(255,255,255,0.025)', 80);
+
+  // amber glow blob
+  const grd = ctx.createRadialGradient(W * .65, H * .35, 0, W * .65, H * .35, short * .55);
+  grd.addColorStop(0, 'rgba(245,158,11,0.18)');
+  grd.addColorStop(1, 'rgba(245,158,11,0)');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+
+  // left accent bar
+  ctx.fillStyle = vcAccent;
+  ctx.fillRect(0, 0, 6, H);
+
+  // features
+  const activeFeats = FEATURES.filter(f => featureState[f]);
+  const featSize = isPortrait ? short * 0.028 : short * 0.022;
+  const featX    = isPortrait ? W * 0.12 : W * 0.08;
+  let featY      = isPortrait ? H * 0.14 : H * 0.16;
+  const featGap  = isPortrait ? H * 0.038 : H * 0.048;
+
+  activeFeats.forEach(feat => {
+    // pill bg
+    const pw = featSize * feat.length * 0.58 + featSize * 1.4;
+    const ph = featSize * 1.6;
+    roundRect(ctx, featX - featSize * 0.5, featY - ph * 0.55, pw, ph, ph / 2, 'rgba(245,158,11,0.12)');
+    ctx.fillStyle = vcAccent;
+    ctx.font = `bold ${featSize}px 'Barlow Condensed', sans-serif`;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('▸ ' + feat, featX, featY);
+    featY += featGap;
+  });
+
+  // main bolt icon
+  const bx = isPortrait ? W * 0.5 : W * 0.65;
+  const by = isPortrait ? H * 0.5 : H * 0.45;
+  const br = isPortrait ? short * 0.13 : short * 0.16;
+  bolt(ctx, bx, by, br, vcAccent);
+
+  // app name
+  const nameSize = isPortrait ? short * 0.115 : short * 0.1;
+  const nameX    = isPortrait ? W * 0.5 : W * 0.12;
+  const nameY    = isPortrait ? H * 0.72 : H * 0.76;
+  ctx.fillStyle  = P.text;
+  ctx.font       = `800 ${nameSize}px 'Barlow Condensed', sans-serif`;
+  ctx.textAlign  = isPortrait ? 'center' : 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(name.toUpperCase(), nameX, nameY);
+
+  // tagline
+  const tagSize = isPortrait ? short * 0.042 : short * 0.038;
+  ctx.fillStyle = vcAccent;
+  ctx.font      = `600 ${tagSize}px 'Barlow Condensed', sans-serif`;
+  ctx.fillText(tag, nameX, nameY + tagSize * 1.7);
+
+  // sub
+  const subSize = isPortrait ? short * 0.026 : short * 0.022;
+  ctx.fillStyle = P.sub;
+  ctx.font      = `400 ${subSize}px 'DM Sans', sans-serif`;
+  ctx.fillText(sub, nameX, nameY + tagSize * 1.7 + subSize * 2.6);
+
+  // bottom border line
+  ctx.fillStyle = vcAccent;
+  ctx.fillRect(0, H - 4, W, 4);
+}
+
+/* ───────────── SOCIAL KIT ───────────────────────── */
+function kitCard(id, W, H, headline, tag, cta, layout) {
+  const ctx = setCanvas(id, W, H);
+  const short = Math.min(W, H);
+
+  bg(ctx, W, H, P.bg);
+  grid(ctx, W, H, 'rgba(255,255,255,0.022)', 60);
+
+  // glow
+  const grd = ctx.createRadialGradient(W * .6, H * .4, 0, W * .6, H * .4, short * .6);
+  grd.addColorStop(0, 'rgba(245,158,11,0.15)');
+  grd.addColorStop(1, 'rgba(245,158,11,0)');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+
+  const isPortrait = H > W;
+  const padX = W * 0.09;
+  const padY = H * (isPortrait ? 0.08 : 0.12);
+
+  // amber accent bar (left)
+  ctx.fillStyle = P.amber;
+  ctx.fillRect(0, 0, 5, H);
+
+  if (!isPortrait) {
+    // bolt right
+    bolt(ctx, W * 0.72, H * 0.45, short * 0.2, P.amber);
+  } else {
+    bolt(ctx, W * 0.5, H * 0.3, short * 0.14, P.amber);
+  }
+
+  // headline
+  const hSize = isPortrait ? short * 0.072 : short * 0.07;
+  ctx.fillStyle = P.text;
+  ctx.font = `800 ${hSize}px 'Barlow Condensed', sans-serif`;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  const hy = isPortrait ? H * 0.5 : padY;
+  ctx.fillText(headline.toUpperCase(), padX, hy);
+
+  // tag
+  const tSize = isPortrait ? short * 0.04 : short * 0.038;
+  ctx.fillStyle = P.amber;
+  ctx.font = `600 ${tSize}px 'Barlow Condensed', sans-serif`;
+  ctx.fillText(tag, padX, hy + hSize * 1.4);
+
+  // features strip
+  const ftxt = '6 Actions  ·  Delay Timer  ·  No Install  ·  MIT';
+  const fSize = isPortrait ? short * 0.026 : short * 0.024;
+  ctx.fillStyle = P.muted;
+  ctx.font = `400 ${fSize}px 'DM Sans', sans-serif`;
+  ctx.fillText(ftxt, padX, hy + hSize * 1.4 + tSize * 2);
+
+  // cta
+  const ctaSize = fSize * 0.9;
+  ctx.fillStyle = P.amberLo;
+  ctx.font = `500 ${ctaSize}px 'DM Sans', sans-serif`;
+  ctx.fillText(cta, padX, H - padY - ctaSize * 1.2);
+
+  // bottom bar
+  ctx.fillStyle = P.amber;
+  ctx.fillRect(0, H - 4, W, 4);
+}
+
+function drawAllKit() {
+  const h  = document.getElementById('kit-headline').value;
+  const t  = document.getElementById('kit-tag').value;
+  const c  = document.getElementById('kit-cta').value;
+
+  kitCard('kit-twitter',  1200, 675,  h, t, c);
+  kitCard('kit-ig-sq',    1080, 1080, h, t, c);
+  kitCard('kit-ig-story', 1080, 1920, h, t, c);
+  kitCard('kit-linkedin', 1200, 627,  h, t, c);
+}
+
+/* ───────────── YOUTUBE ASSETS ───────────────────── */
+function drawYTBanner() {
+  const W = 2560, H = 1440;
+  const ctx = setCanvas('yt-banner', W, H);
+  const channel = document.getElementById('yt-channel').value;
+  const tagline = document.getElementById('yt-tagline').value;
+
+  bg(ctx, W, H, P.bg);
+  grid(ctx, W, H, 'rgba(255,255,255,0.018)', 100);
+
+  // large glow left
+  const grd = ctx.createRadialGradient(W * .3, H * .5, 0, W * .3, H * .5, W * .45);
+  grd.addColorStop(0, 'rgba(245,158,11,0.2)');
+  grd.addColorStop(1, 'rgba(245,158,11,0)');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+
+  // bolt (large)
+  bolt(ctx, W * 0.75, H * 0.5, 220, P.amber);
+
+  // top left: "QuickOff" + mini bolt
+  bolt(ctx, 90, 80, 42, P.amber);
+  ctx.fillStyle = P.amber;
+  ctx.font = 'bold 60px Barlow Condensed, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('QUICKOFF', 148, 80);
+
+  // channel name large
+  ctx.fillStyle = P.text;
+  ctx.font = `800 180px 'Barlow Condensed', sans-serif`;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(channel.toUpperCase(), W * 0.06, H * 0.46);
+
+  // tagline
+  ctx.fillStyle = P.amber;
+  ctx.font = `600 72px 'Barlow Condensed', sans-serif`;
+  ctx.fillText(tagline, W * 0.06, H * 0.62);
+
+  // feature pills
+  ['Power Menu', 'Zero Install', 'Windows 10/11', 'MIT License'].forEach((f, i) => {
+    const px = W * 0.06 + i * 340;
+    const py = H * 0.76;
+    roundRect(ctx, px, py - 28, 310, 56, 28, 'rgba(245,158,11,0.13)');
+    ctx.fillStyle = P.sub;
+    ctx.font = `500 32px 'DM Sans', sans-serif`;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(f, px + 20, py);
+  });
+
+  // bottom line
+  ctx.fillStyle = P.amber;
+  ctx.fillRect(0, H - 6, W, 6);
+}
+
+function drawYTThumb() {
+  const W = 1280, H = 720;
+  const ctx = setCanvas('yt-thumb', W, H);
+  const vtitle = document.getElementById('yt-vid-title').value;
+  const vsub   = document.getElementById('yt-vid-sub').value;
+
+  bg(ctx, W, H, P.bg);
+  grid(ctx, W, H, 'rgba(255,255,255,0.025)', 70);
+
+  // diagonal amber wedge (right half)
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(W * 0.42, 0);
+  ctx.lineTo(W, 0);
+  ctx.lineTo(W, H);
+  ctx.lineTo(W * 0.55, H);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(245,158,11,0.08)';
+  ctx.fill();
+  ctx.restore();
+
+  // bolt
+  bolt(ctx, W * 0.72, H * 0.48, 130, P.amber);
+
+  // version badge top-right
+  roundRect(ctx, W - 170, 30, 140, 44, 22, P.amber);
+  ctx.fillStyle = '#000';
+  ctx.font = `800 26px 'Barlow Condensed', sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('v1.3 NEW', W - 100, 52);
+
+  // title
+  ctx.fillStyle = P.text;
+  ctx.font = `800 96px 'Barlow Condensed', sans-serif`;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(vtitle.toUpperCase(), 60, H * 0.42);
+
+  // sub
+  ctx.fillStyle = P.amber;
+  ctx.font = `600 38px 'Barlow Condensed', sans-serif`;
+  ctx.fillText(vsub, 60, H * 0.58);
+
+  // "FREE" tag
+  roundRect(ctx, 60, H * 0.7, 130, 48, 24, 'rgba(245,158,11,0.18)');
+  ctx.fillStyle = P.amber;
+  ctx.font = `700 26px 'Barlow Condensed', sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('FREE', 125, H * 0.724);
+
+  // left bar
+  ctx.fillStyle = P.amber;
+  ctx.fillRect(0, 0, 7, H);
+  ctx.fillRect(0, H - 5, W, 5);
+}
+
+function drawYTEnd() {
+  const W = 1920, H = 1080;
+  const ctx = setCanvas('yt-end', W, H);
+  const channel = document.getElementById('yt-channel').value;
+
+  bg(ctx, W, H, '#0A0A0A');
+  grid(ctx, W, H, 'rgba(255,255,255,0.02)', 80);
+
+  // subtle center glow
+  const grd = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, W * 0.45);
+  grd.addColorStop(0, 'rgba(245,158,11,0.12)');
+  grd.addColorStop(1, 'rgba(245,158,11,0)');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+
+  // big bolt center
+  bolt(ctx, W * 0.5, H * 0.42, 120, P.amber);
+
+  // subscribe placeholder circle (left)
+  roundRect(ctx, W * 0.08, H * 0.22, W * 0.28, H * 0.55, 16, 'rgba(30,26,22,0.9)', P.border);
+  ctx.fillStyle = P.muted;
+  ctx.font = `700 22px 'Barlow Condensed', sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('SUBSCRIBE BUTTON AREA', W * 0.22, H * 0.495);
+
+  // video placeholder (right)
+  roundRect(ctx, W * 0.64, H * 0.22, W * 0.28, H * 0.55, 16, 'rgba(30,26,22,0.9)', P.border);
+  ctx.fillStyle = P.muted;
+  ctx.font = `700 22px 'Barlow Condensed', sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.fillText('VIDEO CARD AREA', W * 0.78, H * 0.495);
+
+  // center label
+  ctx.fillStyle = P.text;
+  ctx.font = `800 64px 'Barlow Condensed', sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(channel.toUpperCase(), W * 0.5, H * 0.78);
+
+  ctx.fillStyle = P.amber;
+  ctx.font = `600 28px 'Barlow Condensed', sans-serif`;
+  ctx.textBaseline = 'top';
+  ctx.fillText('THANKS FOR WATCHING ·  LIKE · SUBSCRIBE · SHARE', W * 0.5, H * 0.81);
+
+  ctx.fillStyle = P.amber;
+  ctx.fillRect(0, H - 4, W, 4);
+}
+
+function drawYTIcon() {
+  const W = 800, H = 800;
+  const ctx = setCanvas('yt-icon', W, H);
+
+  bg(ctx, W, H, P.bg);
+
+  // outer amber ring
+  ctx.beginPath();
+  ctx.arc(W/2, H/2, W/2 - 4, 0, Math.PI*2);
+  ctx.strokeStyle = P.amber;
+  ctx.lineWidth = 8;
+  ctx.stroke();
+
+  // inner dark circle
+  ctx.beginPath();
+  ctx.arc(W/2, H/2, W/2 - 50, 0, Math.PI*2);
+  ctx.fillStyle = P.bg;
+  ctx.fill();
+
+  // bolt
+  bolt(ctx, W/2, H/2, W * 0.28, P.amber);
+}
+
+function drawAllYT() {
+  drawYTBanner();
+  drawYTThumb();
+  drawYTEnd();
+  drawYTIcon();
+}
+
+/* ───────────── POST COPY ───────────────────────── */
+const POSTS = [
+  {
+    platform: '𝕏  Twitter / X',
+    icon: '🐦',
+    limit: 280,
+    text: `⚡ Just dropped QuickOff v1.3 — a power menu for Windows that needs zero install!
+
+One double-click → Hibernate, Sleep, Shut Down, Restart, Lock, Sign Out — with a delay timer & confirm overlay.
+
+✅ No installer, no admin rights
+✅ Light & dark theme
+✅ Auto Desktop shortcut on first run
+✅ CLI mode for scripts & Task Scheduler
+✅ Auto-update check via GitHub Releases
+
+100% free & open source 🚀
+
+🔗 github.com/yashwanthramsomireddy/QuickOff
+
+#Windows #WindowsTools #OpenSource #MadeInIndia #BuildInPublic #PowerUser`,
+  },
+  {
+    platform: 'Instagram',
+    icon: '📸',
+    limit: 2200,
+    text: `⚡ Meet QuickOff — the Windows power menu you never knew you needed!
+
+Forget digging through the Start Menu. QuickOff floats in the corner of your screen and gives you instant one-click access to every power action:
+⚡ Hibernate · Sleep · Shut Down · Restart · Lock · Sign Out
+
+No installer. No admin rights. No dependencies — just extract and run.
+
+✨ What's new in v1.3:
+→ Auto Desktop shortcut on first launch
+→ Light & dark theme toggle
+→ Delay timer — schedule any action up to N seconds ahead
+→ Confirm overlay to prevent accidental shutdowns
+→ Auto-update check via GitHub Releases API
+→ CLI mode for terminal & Task Scheduler scripts
+
+Built for Windows 10 & 11 using only built-in Windows tools (mshta.exe, shutdown, rundll32). The entire app is under 200 KB.
+
+🔗 Link in bio · github.com/yashwanthramsomireddy/QuickOff
+
+#Windows #WindowsTips #PowerUser #OpenSource #FreeApp #MadeInIndia #BuildInPublic #WindowsTools #TechTools #Productivity`,
+  },
+  {
+    platform: 'LinkedIn',
+    icon: '💼',
+    limit: 3000,
+    text: `🚀 Excited to share QuickOff v1.3 — a zero-install Windows power menu I built entirely with built-in Windows components.
+
+The problem: Windows buries power actions (Hibernate, Sleep, Sign Out, etc.) several clicks deep. QuickOff puts all six on a floating widget that's always one double-click away.
+
+What makes it interesting technically:
+• Runs on mshta.exe (Microsoft HTA Host) — ships with every Windows since XP
+• No VBScript bridge — uses ActiveXObject in pure JavaScript (VBScript broke on Win11)
+• Shortcut creation via a temp PowerShell .ps1 file for reliability
+• Async GitHub Releases API check for update notifications
+• All registry operations in HKCU — zero admin rights needed
+• Self-contained: icon embedded as base64 data URI, no external deps
+
+The whole thing is a single .hta file + a .bat launcher, under 200 KB.
+
+v1.3 ships with a light/dark theme, delay timer, confirm overlay, CLI mode, and auto Desktop shortcut on first run.
+
+100% free and MIT licensed.
+
+🔗 github.com/yashwanthramsomireddy/QuickOff
+
+#OpenSource #Windows #SideProject #BuildInPublic #MadeInIndia #WindowsDev #MITLicense`,
+  },
+  {
+    platform: 'WhatsApp / Telegram',
+    icon: '💬',
+    limit: null,
+    text: `⚡ *QuickOff v1.3* — Free Windows Power Menu
+
+Tired of hunting through the Start Menu to shut down or sleep your PC? QuickOff puts everything on a tiny floating widget:
+
+🔋 Hibernate
+😴 Sleep
+⏻ Shut Down
+🔄 Restart
+🔒 Lock PC
+🚪 Sign Out
+
+✅ Zero install — just extract & run
+✅ No admin rights needed
+✅ Delay timer + confirm overlay
+✅ Light & dark theme
+✅ CLI mode for scripting
+✅ Auto-update check
+
+Runs on any Windows 10/11 PC using only built-in Windows tools. Totally free & open source (MIT).
+
+🔗 github.com/yashwanthramsomireddy/QuickOff`,
+  },
+  {
+    platform: 'Reddit',
+    icon: '🤖',
+    limit: null,
+    text: `**[ShowHN] QuickOff v1.3 — floating Windows power menu, zero install, zero deps**
+
+Hey r/windows — I just released QuickOff v1.3, a tiny floating power menu widget for Windows 10/11.
+
+**What it does:** puts Hibernate, Sleep, Shut Down, Restart, Lock, and Sign Out one click away from a floating widget in your bottom-right corner. Includes a delay timer, confirm overlay, light/dark theme, and auto-update check.
+
+**The interesting constraint:** it runs entirely on \`mshta.exe\` (Microsoft HTA Host, ships with every Windows since XP), using only \`WScript.Shell\`, \`Scripting.FileSystemObject\`, and \`Msxml2.XMLHTTP.6.0\` — no installer, no runtime, no admin rights, no external deps. The whole package is under 200 KB.
+
+**v1.3 changes:**
+- Auto Desktop shortcut on first launch (via a temp PowerShell .ps1 — direct COM CreateShortcut was silently failing in the HTA context)
+- Fixed GitHub repo URL in update checker
+- Fixed path resolution for folders with spaces
+
+GitHub: github.com/yashwanthramsomireddy/QuickOff
+
+Happy to answer questions about the HTA approach — it's a surprisingly capable (and weird) runtime.`,
+  },
+  {
+    platform: 'Product Hunt',
+    icon: '🦁',
+    limit: null,
+    text: `⚡ QuickOff — Windows power menu. Zero install. Zero admin. Zero deps.
+
+QuickOff is a floating power widget for Windows 10/11 that gives you instant access to all six power actions: Hibernate, Sleep, Shut Down, Restart, Lock, and Sign Out.
+
+🔑 Key features:
+• Delay timer — schedule any action N seconds ahead
+• Confirm overlay — no accidental shutdowns
+• Light & dark theme with one-click toggle
+• Auto Desktop shortcut on first run
+• CLI mode for Task Scheduler & scripts
+• Auto-update check via GitHub Releases
+• Runs on Windows built-ins only — mshta.exe, shutdown, rundll32
+• No installer · No admin rights · Under 200 KB
+
+100% free & open source (MIT License)
+
+👉 github.com/yashwanthramsomireddy/QuickOff`,
+  },
+];
+
+function copyPost(idx) {
+  const btn = document.getElementById('copy-btn-' + idx);
+  navigator.clipboard.writeText(POSTS[idx].text).then(() => {
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '⎘ Copy';
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(() => {
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = POSTS[idx].text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '⎘ Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function renderPosts() {
+  const grid = document.getElementById('post-grid');
+  grid.innerHTML = POSTS.map((p, i) => {
+    const charCount = p.limit
+      ? `<span class="post-char-count">${p.text.length} / ${p.limit}</span>`
+      : '';
+    return `<div class="post-card">
+      <div class="post-card-head">
+        <span class="post-card-icon">${p.icon}</span>
+        <span class="post-card-name">${p.platform}</span>
+        ${charCount}
+      </div>
+      <div class="post-body">${p.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+      <div class="post-card-foot">
+        <button class="copy-btn" id="copy-btn-${i}" onclick="copyPost(${i})">⎘ Copy</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ───────────── BOOT ─────────────────────────────── */
+initControls();
+drawVideoCard();
+renderPosts();
+// kit & yt draw on tab open
+</script>
